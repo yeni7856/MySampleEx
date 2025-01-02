@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<Dialog>
+		<number/>
+		<character/>
+		<name/>
+		<sentence/>
+	</Dialog>
+	<Dialog>
+		<number/>
+		<character/>
+		<name/>
+		<sentence/>
+	</Dialog>
+</root>
