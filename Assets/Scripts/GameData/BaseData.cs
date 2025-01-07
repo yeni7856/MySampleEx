@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace MySampleEx
 {
@@ -10,7 +11,8 @@ namespace MySampleEx
     public class BaseData : ScriptableObject
     {
         #region Variables
-        public string[] names;
+        //public string[] names;    
+        public List<string> names;
         public const string DataDirectory = "/ResourcesData/Resources/Data/";
         #endregion
         //생성자
@@ -23,7 +25,7 @@ namespace MySampleEx
             {
                 return 0;
             }
-            return names.Length;
+            return names.Count;
         }
 
         //툴에 출력하기 위해 이름 목록 리스트 얻어오기
@@ -34,7 +36,7 @@ namespace MySampleEx
 
             for(int i = 0; i < length; i ++)
             {
-                if(fillterWord != null)
+                if (fillterWord != string.Empty)
                 {
                     if (names[i].ToLower().Contains(fillterWord.ToLower()))
                     {
@@ -42,7 +44,7 @@ namespace MySampleEx
                     }
                 }
 
-                if(showID)
+                if (showID)
                 {
                     retList[i] = i.ToString() + " : " + names[i];
                 }
