@@ -6,9 +6,7 @@ namespace MySampleEx
     {
         None = -1,
         
-      NewData0=0,
-      NewData1=1,
-      NewData2=2,
+      NewEffect1=0,
 
     }
 }

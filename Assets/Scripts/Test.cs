@@ -7,7 +7,7 @@ namespace MySampleEx
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            EffectManager.Instance.EffectOneShot((int)EffectList.NewData0,Vector3.zero);
+            EffectManager.Instance.EffectOneShot((int)EffectList.NewEffect1, Vector3.zero);
         }
     }
 }
