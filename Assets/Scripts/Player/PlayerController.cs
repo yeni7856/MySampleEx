@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 
@@ -41,6 +42,12 @@ namespace MySampleEx
         public float idleTimeout = 5f;                              //이동상태 대기에서 5초가 지나면 대기 상태ㅏ로 보낸다.
         protected float m_idleTimer = 0f;                       //타이머 카운트
 
+        //카메라(프리룩)
+        public CameraSetting cameraSetting;
+
+        //공격
+        protected bool m_InAttack;                                  //공격여부 판단
+
         //상수
         const float k_GroundAccelation = 20f;                 //이동 가속도 값
         const float k_GroundDeceleration = 25f;             //이동 감속도 값
@@ -63,6 +70,8 @@ namespace MySampleEx
         readonly int m_HashGrounded = Animator.StringToHash("Grounded");
         readonly int m_HashAirbornVerticalSpeed = Animator.StringToHash("AirBornVericalSpeed");
         readonly int m_HashTimeoutIdle = Animator.StringToHash("TimeoutIdle");
+        readonly int m_HashMeleeAttack = Animator.StringToHash("MeleeAttack");
+        readonly int m_HashStateTIme = Animator.StringToHash("StateTIme");
 
         //애니메이션 상태 해시값
         readonly int m_HashLocomotion = Animator.StringToHash("Locomotion");
@@ -77,10 +86,22 @@ namespace MySampleEx
             m_Input = GetComponent<PlayerInputAction>();
             m_CharCtr = GetComponent<CharacterController>();
             m_Animator = GetComponent<Animator>();
+
+            cameraSetting = FindAnyObjectByType<CameraSetting>();
+
+            if(cameraSetting != null )
+            {
+                if (cameraSetting.follow == null)
+                    cameraSetting.follow = this.transform;
+                if (cameraSetting.lookAt == null)
+                    cameraSetting.lookAt = this.transform.Find("HeadTarget");
+            }
         }
         private void FixedUpdate()
         {
             CacheAnimatorState();
+
+            AttackState();
 
             CalculateForwardMovement();
             CalculateVerticalMovement();
@@ -117,6 +138,16 @@ namespace MySampleEx
 
 
             return updateOrientationForLocomotion || updateOrientationForAirbon || updateOrientationForLanding;
+        }
+
+        //공격 처리
+        void AttackState()
+        {
+            m_Animator.ResetTrigger(m_HashMeleeAttack);
+            m_Animator.SetFloat(m_HashStateTIme, Mathf.Repeat(m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f));
+            if(m_Input.Attack)
+                m_Animator.SetTrigger(m_HashMeleeAttack);
+                    
         }
 
         //(Forward)이동속도 계산
@@ -185,9 +216,15 @@ namespace MySampleEx
             Vector3 localMovementDirection = new Vector3(moveInput.x,0f,moveInput.y).normalized;    //인풋에 따른 3d 방향 계산
 
             //Camera forward 구하기
-            Vector3 forward = Vector3.forward;      //글로벌에 forward 방향 고정
+            //Vector3 forward = Vector3.forward;      //글로벌에 forward 방향 고정
+            Vector3 forward = Quaternion.Euler(0f, cameraSetting.freeLookCamera.GetComponent<CinemachineOrbitalFollow>().HorizontalAxis.Value, 
+                0f) * Vector3.forward;
+
+            forward.y = 0f;
+            forward.Normalize();
+
             Quaternion targetRotation;
-            if(Mathf.Approximately(Vector3.Dot(localMovementDirection,forward), -1.0f))   //반대방향
+            if(Mathf.Approximately(Vector3.Dot(localMovementDirection, Vector3.forward), -1.0f))   //반대방향
             {
                 targetRotation = Quaternion.LookRotation(-forward); //앞방향에 반대방향 
             }
@@ -210,6 +247,7 @@ namespace MySampleEx
             m_TragetRotation = targetRotation;
         }
 
+
         void UpdateOrientation()
         {
             //애니 입력값 설정 
@@ -226,11 +264,12 @@ namespace MySampleEx
             transform.rotation = m_TragetRotation;  
         }
 
+
         //이동상태의 대기에서 5초가 지나면 대기상태로 보낸다
         void TimeoutToIdle()
         {
             //입력값 (이동)
-            bool inputDetected = IsMoveInput || m_Input.Jump;
+            bool inputDetected = IsMoveInput || m_Input.Jump || m_Input.Attack;
 
             //타이머 카운트
             if(m_IsGrounded && !inputDetected)
@@ -254,7 +293,6 @@ namespace MySampleEx
             //애니 입력값 설정
             m_Animator.SetBool(m_HashInputDetected,inputDetected);
         }
-
 
         private void OnAnimatorMove()
         {
