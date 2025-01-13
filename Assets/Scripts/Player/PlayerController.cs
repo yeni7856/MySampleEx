@@ -7,7 +7,7 @@ namespace MySampleEx
     /// <summary>
     /// 플레이어 캐릭터 제어(이동, 애니메이션, 액션)
     /// </summary>
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IMessageReceiver
     {
         #region Variables
         public float maxForwardSpeed = 8f;              //플레이어 최고 이동 속도
@@ -47,6 +47,9 @@ namespace MySampleEx
 
         //공격
         protected bool m_InAttack;                                  //공격여부 판단
+
+        //데미지처리
+        protected Damageable m_Damageable;
 
         //상수
         const float k_GroundAccelation = 20f;                 //이동 가속도 값
@@ -97,6 +100,18 @@ namespace MySampleEx
                     cameraSetting.lookAt = this.transform.Find("HeadTarget");
             }
         }
+        private void OnEnable()
+        {
+            m_Damageable = GetComponent<Damageable>();
+            m_Damageable.onDamageMessageReceiver.Add(this);
+            m_Damageable.IsInvulnerable = true;
+        }
+
+        private void OnDisable()
+        {
+            m_Damageable.onDamageMessageReceiver.Remove(this);
+        }
+
         private void FixedUpdate()
         {
             CacheAnimatorState();
@@ -333,6 +348,36 @@ namespace MySampleEx
                 m_Animator.SetFloat(m_HashAirbornVerticalSpeed, m_VerticalSpeed);
             }
             m_Animator.SetBool(m_HashGrounded, m_IsGrounded);
+        }
+
+        //메세지 인터페이스 기능 구현
+        public void OnReceiveMessage(MessageType type, object sender, object msg)
+        {
+            switch(type)
+            {
+                case MessageType.Damaged:
+                    {
+                        Damageable.DamageMessage damageData = (Damageable.DamageMessage)msg;
+                    }
+                    break;
+                case MessageType.Death:
+                    {
+                        Damageable.DamageMessage damageData = (Damageable.DamageMessage)msg;
+                    }
+                    break;
+            }
+        }
+
+        //데미지 처리, 애니메이션, 연출(vfx, sfx) ....
+        void Damaged(Damageable.DamageMessage damageMessage)
+        {
+            //TODO
+        }
+
+        //죽음 처리, 애니메이션 , 연출(vfx, sfx), ....
+        void Die(Damageable.DamageMessage damageMessage)
+        {
+            //TODO
         }
     }
 }
