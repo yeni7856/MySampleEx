@@ -46,7 +46,9 @@ namespace MySampleEx
         public CameraSetting cameraSetting;
 
         //공격
+        public MeeleWeapon meeleWeapon;
         protected bool m_InAttack;                                  //공격여부 판단
+        protected bool m_InCombo;                                //어택 상태 여부
 
         //데미지처리
         protected Damageable m_Damageable;
@@ -80,6 +82,10 @@ namespace MySampleEx
         readonly int m_HashLocomotion = Animator.StringToHash("Locomotion");
         readonly int m_HashAirborne = Animator.StringToHash("Airborne");
         readonly int m_HashLanding = Animator.StringToHash("Landing");
+        readonly int m_HashEllenCombo1 = Animator.StringToHash("EllenCombo1");
+        readonly int m_HashEllenCombo2 = Animator.StringToHash("EllenCombo2");
+        readonly int m_HashEllenCombo3 = Animator.StringToHash("EllenCombo3");
+        readonly int m_HashEllenCombo4 = Animator.StringToHash("EllenCombo4");
 
         #endregion
 
@@ -99,12 +105,15 @@ namespace MySampleEx
                 if (cameraSetting.lookAt == null)
                     cameraSetting.lookAt = this.transform.Find("HeadTarget");
             }
+            
+            meeleWeapon.SetOwner(this.gameObject);
         }
         private void OnEnable()
         {
             m_Damageable = GetComponent<Damageable>();
             m_Damageable.onDamageMessageReceiver.Add(this);
             m_Damageable.IsInvulnerable = true;
+            EquipMeeleWeapon(false);
         }
 
         private void OnDisable()
@@ -115,6 +124,8 @@ namespace MySampleEx
         private void FixedUpdate()
         {
             CacheAnimatorState();
+            
+            EquipMeeleWeapon(IsWeaponEquiped());
 
             AttackState();
 
@@ -162,7 +173,42 @@ namespace MySampleEx
             m_Animator.SetFloat(m_HashStateTIme, Mathf.Repeat(m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime, 1f));
             if(m_Input.Attack)
                 m_Animator.SetTrigger(m_HashMeleeAttack);
-                    
+        }
+
+        //무기를 사용하는 상태인지 - MeleeCombatSM 상태인지
+        bool IsWeaponEquiped()
+        {
+            bool equiped = m_NextStateInfo.shortNameHash == m_HashEllenCombo1 
+                || m_CurrentStateInfo.shortNameHash == m_HashEllenCombo1;
+            enabled |= m_NextStateInfo.shortNameHash == m_HashEllenCombo2
+                || m_CurrentStateInfo.shortNameHash == m_HashEllenCombo2;
+            enabled |= m_NextStateInfo.shortNameHash == m_HashEllenCombo3
+                || m_CurrentStateInfo.shortNameHash == m_HashEllenCombo3;
+            enabled |= m_NextStateInfo.shortNameHash == m_HashEllenCombo4
+                || m_CurrentStateInfo.shortNameHash == m_HashEllenCombo4;
+            return equiped;
+        }
+        void EquipMeeleWeapon(bool equiped)
+        {
+            meeleWeapon.gameObject.SetActive(equiped);
+            m_InAttack = true;
+            m_InCombo = equiped;
+
+            if(equiped == false)
+            {
+                m_Animator.ResetTrigger(m_HashMeleeAttack);
+            }
+        }
+
+        public void MeleeAttackStart(int throwing = 0)
+        {
+            meeleWeapon.BeginAttack(throwing != 0);
+            m_InAttack = true;
+        }
+        public void MeleeAttackEnd()
+        {
+            meeleWeapon.EndAttack();
+            m_InAttack = false;
         }
 
         //(Forward)이동속도 계산

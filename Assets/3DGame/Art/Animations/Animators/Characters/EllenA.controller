@@ -675,7 +675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c32123381fd0c2044bbbcde4fd7f6160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectIndex: 3
+  effectIndex: 2
 --- !u!114 &-4738960541337985616
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1271,7 +1271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c32123381fd0c2044bbbcde4fd7f6160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectIndex: 4
+  effectIndex: 3
 --- !u!1102 &730004903048282381
 AnimatorState:
   serializedVersion: 6
@@ -1470,7 +1470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c32123381fd0c2044bbbcde4fd7f6160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectIndex: 2
+  effectIndex: 1
 --- !u!1101 &3404923559842282431
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1921,7 +1921,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c32123381fd0c2044bbbcde4fd7f6160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectIndex: 1
+  effectIndex: 0
 --- !u!1102 &6808083224958939633
 AnimatorState:
   serializedVersion: 6
