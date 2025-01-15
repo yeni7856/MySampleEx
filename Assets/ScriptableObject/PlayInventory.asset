@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e084854ad9fca438013d62d7f020a3, type: 3}
+  m_Name: PlayInventory
+  m_EditorClassIdentifier: 
+  dataBase: {fileID: 11400000, guid: b3811b0d615ad674eb3fd3b0beb82b7f, type: 2}
+  type: 0
+  container:
+    slots:
+    - item:
+        id: 0
+        name: ItemA
+        buffs:
+        - stat: 1
+          value: 0
+          min: 0
+          max: 0
+        - stat: 2
+          value: 0
+          min: 0
+          max: 0
+      amount: 1
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+    - item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+      AllowedItme: 
+  savePath: /Inventory.json
