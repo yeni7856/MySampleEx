@@ -21,6 +21,9 @@ namespace MySampleEx
         //인벤토리 슬롯 읽기 전용
         public ItemSlot[] Slots => container.slots;
 
+        [NonSerialized]
+        public Action<ItemObject> OnUseItem;
+
         //현재 빈 슬롯 갯수
         public int EmptySlotCount
         {
@@ -69,6 +72,12 @@ namespace MySampleEx
         {
             return Slots.FirstOrDefault(i => i.item.id == item.id);
         }   
+
+        //매개변수로 들어온 아이템 오브젝트가 인벤토리에 있는지 여부
+        public bool IsContainItem(ItemObject itemObject)
+        {
+            return Slots.FirstOrDefault(i=>i.item.id == itemObject.data.id) != null;
+        }
         
         //빈 슬롯 찾기
         public ItemSlot GetEmptySlot()
@@ -87,8 +96,23 @@ namespace MySampleEx
             {
                 ItemSlot temp = new ItemSlot(itemB.item, itemB.amount);
                 itemB.UpdateSlot(itemA.item, itemA.amount);
-                itemB.UpdateSlot(temp.item, temp.amount);   
+                itemA.UpdateSlot(temp.item, temp.amount);
             }
+        }
+
+        //아이템 사용하기
+        public void UseItem(ItemSlot useSlot)
+        {
+            //아이템 체크
+            if(useSlot.ItemObject == null || useSlot.item.id <= -1 
+                || useSlot.amount <= 0)   
+            {
+                return;
+            }
+            ItemObject itemObject = useSlot.ItemObject;
+            useSlot.UpdateSlot(useSlot.item, useSlot.amount -1);    //수량하나 줄어듬
+
+            OnUseItem?.Invoke(itemObject);
         }
 
         //인벤토리데이터 저장하기, 불러오기

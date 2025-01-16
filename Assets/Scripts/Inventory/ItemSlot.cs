@@ -12,7 +12,7 @@ namespace MySampleEx
         public int amount;
 
         [NonSerialized]
-        public InventoryObject parent;
+        public InventoryObject parent;      //슬롯 부모 //세팅은UI에서./.
 
         [NonSerialized]
         public GameObject slotUI;       //슬롯이 적용되는 UI 오브젝트
