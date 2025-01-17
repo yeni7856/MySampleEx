@@ -25,12 +25,11 @@ namespace MySampleEx
                 AddEvent(go, EventTriggerType.Drag, delegate { OnDrag(go); });
                 AddEvent(go, EventTriggerType.EndDrag, delegate { OnEndDrag(go); });
 
-
                 //
                 inventoryObject.Slots[i].slotUI = go;
                 slotUIs.Add(go, inventoryObject.Slots[i]);
                 go.name += " : " + i.ToString();
             }
-        }       
+        }
     }
 }

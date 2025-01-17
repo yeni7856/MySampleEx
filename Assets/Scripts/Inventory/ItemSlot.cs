@@ -78,7 +78,7 @@ namespace MySampleEx
         {
             if(AllowedItme.Length <= 0 || itemObject == null || itemObject.data.id <= -1)
             {
-                return false;
+                return true;
             }
             //AllowedItem 체크
             foreach(var itemType in AllowedItme)

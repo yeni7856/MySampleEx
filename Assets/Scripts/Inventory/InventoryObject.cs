@@ -21,7 +21,6 @@ namespace MySampleEx
         //인벤토리 슬롯 읽기 전용
         public ItemSlot[] Slots => container.slots;
 
-        [NonSerialized]
         public Action<ItemObject> OnUseItem;
 
         //현재 빈 슬롯 갯수
