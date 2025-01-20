@@ -6,7 +6,11 @@ namespace MySampleEx
     {
         #region Variables
         public ItemDataBaseSO dataBase;
+
         public DynamicInventoryUI playerInventoryUI;
+        public StaticInventoryUI playerIEquipmentUI;
+
+        public int itemId = 0;
         #endregion
 
         private void Update()
@@ -14,6 +18,12 @@ namespace MySampleEx
             if (Input.GetKeyDown(KeyCode.I))
             {
                 playerInventoryUI.gameObject.SetActive(!playerInventoryUI.gameObject.activeSelf);
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                playerIEquipmentUI.gameObject.SetActive(!playerIEquipmentUI.gameObject.activeSelf);
+                //커서
+
             }
             if (Input.GetKeyDown(KeyCode.N))
             {
@@ -23,7 +33,7 @@ namespace MySampleEx
 
         public void AddNewItem()
         {
-            ItemObject itemObject = dataBase.itemObjects[1];
+            ItemObject itemObject = dataBase.itemObjects[itemId];
             Item newItem = itemObject.CreateItme();
 
             playerInventoryUI.inventoryObject.AddItem(newItem, 1);

@@ -17,18 +17,10 @@ MonoBehaviour:
   container:
     slots:
     - item:
-        id: 0
-        name: ItemA
-        buffs:
-        - stat: 1
-          value: 0
-          min: 0
-          max: 0
-        - stat: 2
-          value: 0
-          min: 0
-          max: 0
-      amount: 1
+        id: -1
+        name: 
+        buffs: []
+      amount: -1
       AllowedItme: 
     - item:
         id: -1

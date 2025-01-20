@@ -18,12 +18,12 @@ MonoBehaviour:
     buffs:
     - stat: 1
       value: 0
-      min: 0
-      max: 0
-    - stat: 2
+      min: 5
+      max: 8
+    - stat: 3
       value: 0
-      min: 0
-      max: 0
+      min: 7
+      max: 12
   type: 6
   stackable: 0
   icon: {fileID: 21300000, guid: d63f32dd56a909f4fb29e70bd504bec0, type: 3}

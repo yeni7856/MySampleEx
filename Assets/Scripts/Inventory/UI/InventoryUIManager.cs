@@ -58,7 +58,8 @@ namespace MySampleEx
             itemSlot.slotUI.transform.GetChild(0).GetComponent<Image>().color
                 = itemSlot.item.id < 0 ? new Color(1, 1, 1, 0) : new Color(1, 1, 1, 1);
             itemSlot.slotUI.GetComponentInChildren<TextMeshProUGUI>().text
-                = itemSlot.item.id < 0 ? string.Empty : (itemSlot.amount == 1 ? string.Empty : itemSlot.amount.ToString());
+                = itemSlot.item.id < 0 ? string.Empty :
+                (itemSlot.amount == 1 ? string.Empty : itemSlot.amount.ToString());
         }
 
         //이벤트 트리거 이벤트 등록

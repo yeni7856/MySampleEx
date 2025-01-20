@@ -33,6 +33,7 @@ namespace MySampleEx
             value = UnityEngine.Random.Range(min, max);
         }
 
+        //매개변수로 입력받은 변수에 value값 누적한다
         public void AddValue(ref int baseValue)
         {
             baseValue += value;

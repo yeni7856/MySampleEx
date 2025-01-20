@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ItemB
   m_EditorClassIdentifier: 
   data:
-    id: -1
+    id: 1
     name: 
     buffs:
     - stat: 1

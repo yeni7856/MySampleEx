@@ -12,6 +12,7 @@ namespace MySampleEx
         Stamina,
         Strength,
         Health,
+        Mana,
     }
 }
 
