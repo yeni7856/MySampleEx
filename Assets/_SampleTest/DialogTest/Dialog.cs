@@ -1,4 +1,4 @@
-namespace MySampleEx
+namespace MySample
 {
     /// <summary>
     /// Dialog xml 데이터 정의 데이터 모델 클래스

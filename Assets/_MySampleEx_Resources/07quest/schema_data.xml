@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Quests>
+<quests>
+	<Quest>
+		<number/>
+		<npcNumber/>
+		<name/>
+		<description/>
+		<dialogIndex/>
+		<level/>
+		<questType/>
+		<goalIndex/>
+		<goalAmount/>
+		<rewardGold/>
+		<rewardExp/>
+		<rewardItem/>
+	</Quest>
+	<Quest>
+		<number/>
+		<npcNumber/>
+		<name/>
+		<description/>
+		<dialogIndex/>
+		<level/>		
+		<questType/>
+		<goalIndex/>
+		<goalAmount/>
+		<rewardGold/>
+		<rewardExp/>
+		<rewardItem/>
+	</Quest>
+</quests>
+</Quests>
