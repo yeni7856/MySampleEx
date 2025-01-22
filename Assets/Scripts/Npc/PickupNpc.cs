@@ -17,6 +17,7 @@ namespace MySampleEx
 
         public TextMeshProUGUI actionTextUI;
         public string actionText = "Pickup ";
+
         #endregion
 
         protected virtual void Start()
@@ -29,13 +30,18 @@ namespace MySampleEx
         {
             distance = Vector3.Distance(transform.position, playerController.transform.position);
 
-            if(distance < 2f)
+            if (distance < 2f)
             {
                 ShowActionUI();
             }
             else
             {
                 HiddenActionUI();
+            }
+            if (Input.GetKeyUp(KeyCode.E) && distance < 2f)
+            {
+                //transform.GetComponent<BoxCollider>().enabled = false;
+                DoAction();
             }
         }
 
@@ -52,5 +58,11 @@ namespace MySampleEx
             actionTextUI.gameObject.SetActive(false);
             actionTextUI.text = "";
         }
+
+        public virtual void DoAction()
+        {
+            UIManager.Instance.OpenDialogUI(0, npc.npcType);
+        }
+
     }
 }

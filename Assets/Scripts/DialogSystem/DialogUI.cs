@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 namespace MySampleEx
 {
@@ -22,15 +23,22 @@ namespace MySampleEx
         public TextMeshProUGUI sentenceText;
         public GameObject npcImage;
         public GameObject nextButton;
+
+        //대화 종료시 실행된 이벤트
+        public Action OnCloseDialog;
         #endregion
 
-        private void Start()
+        private void OnEnable()
         {
             dialogs = new Queue<Dialog>();
             InitDialog();
+        }
 
-            //
-            StartDialog(1);
+        private void OnDisable()
+        {
+            InitDialog();
+            dialogs = null;
+            OnCloseDialog = null;
         }
 
         //초기화
@@ -108,10 +116,9 @@ namespace MySampleEx
         //대화 종료
         private void EndDialog()
         {
-            InitDialog();
-
             //대화 종료시 이벤트 처리
-            //...
+            OnCloseDialog?.Invoke();
+
         }
     }
 }

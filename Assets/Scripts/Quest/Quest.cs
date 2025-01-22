@@ -5,6 +5,28 @@ using System.Collections.Generic;
 namespace MySampleEx
 {
     /// <summary>
+    /// 퀘스트 데이터 타입
+    /// </summary>
+    public enum QuestType
+    {
+        None = -1,
+        Kill,
+        Collect,
+    }
+
+    /// <summary>
+    /// 퀘스트 상태
+    /// </summary>
+    public enum QuestState
+    {
+        None = -1,
+        Ready,          //퀘스트 수락 이전
+        Accept,         //퀘스트 수락한 상태(진행중)
+        Complete,     //퀘스트 목표 완료한 상태 (아직 보상 안받은 상ㅇ태)
+        Rewarded,     //퀘스트 보상 받은 상태
+    }
+
+    /// <summary>
     /// 퀘스트 데이터 리스트 클래스
     /// </summary>
     [Serializable]
@@ -31,13 +53,32 @@ namespace MySampleEx
         public int rewardGold { get; set; }         //보상 골드
         public int rewardExp { get; set; }          //보상 경험치
         public int rewardItem { get; set; }         //보상 아이템
-    }
 
-    public enum QuestType
-    {
-        None = -1,
-        Kill,
-        Collect,
-    }
-    
+        [NonSerialized]
+        public QuestGoal questGoal;              //퀘스트 목표
+        [NonSerialized]
+        public QuestState questState;           //퀘스트 상태
+
+        //퀘스트 미션 달성 - Kill
+        public void EnemyKill(int enemyId)
+        {
+            if(questGoal.questType == QuestType.Kill)
+            {
+                if(questGoal.goalIndex == enemyId)
+                {
+                    questGoal.currentAmount++;
+                }
+            }
+        }
+        public void ItemCollect(int itemId)
+        {
+            if (questGoal.questType == QuestType.Collect)
+            {
+                if (questGoal.goalIndex == itemId)
+                {
+                    questGoal.currentAmount++;
+                }
+            }
+        }
+    }    
 }
