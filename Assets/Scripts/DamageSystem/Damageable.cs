@@ -25,7 +25,7 @@ namespace MySampleEx
        public bool IsInvulnerable {  get;  set; }    //무적 여부
         public int CurrentHitPoints { get;  set; }   //Current Health
 
-        public List<MonoBehaviour> onDamageMessageReceiver;
+        public List<MonoBehaviour> onDamageMessageReceviers;
 
         protected float m_timeSinceLasHit = 0.0f;       //무적 타이머 카운트 다운
 
@@ -91,7 +91,7 @@ namespace MySampleEx
             //이미 죽으면 더이상 데미지 입지 않는다.
             if(CurrentHitPoints <= 0)
                 return;
-
+            Debug.Log(CurrentHitPoints.ToString());
             //무적이면
             if(IsInvulnerable)
             {
@@ -124,9 +124,9 @@ namespace MySampleEx
             }
             //데미지 메세지 보내기
             var messageType = CurrentHitPoints <= 0 ? MessageType.Death : MessageType.Damaged;
-            for(int i = 0; i < onDamageMessageReceiver.Count; i++)
+            for(int i = 0; i < onDamageMessageReceviers.Count; i++)
             {
-                var reciver = onDamageMessageReceiver[i] as IMessageReceiver;
+                var reciver = onDamageMessageReceviers[i] as IMessageReceiver;
                 reciver.OnReceiveMessage(messageType, this, data);
             }
         }

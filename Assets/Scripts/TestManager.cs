@@ -11,7 +11,7 @@ namespace MySampleEx
 
         void Start()
         {
-            Item newItem = dataBase.itemObjects[0].CreateItme();        //아이템A 생성
+            Item newItem = dataBase.itemObjects[0].CreateItem();        //아이템A 생성
             inventoryObject.AddItem(newItem, 1);
         }
     }

@@ -11,8 +11,6 @@ namespace MySampleEx
     /// </summary>
     public class QuestUI : MonoBehaviour
     {
-        private Quest quest;                //퀘스트 정보창에 보이는 퀘스트
-
         public TextMeshProUGUI nameText;
         public TextMeshProUGUI descriptionText;
 
@@ -26,17 +24,34 @@ namespace MySampleEx
         public GameObject giveupButton;
         public GameObject okButton;
 
-
         //퀘스트창 진행 종료시 실행된 이벤트
-        public Action OnCloseQuest;
+        public Action OnCloseQuestUI;
+        private QuestManager questManager;
 
-        void SetQuestUI(Quest _quest)
+        private void OnEnable()
         {
-            quest = _quest;
-            nameText.text = quest.name;
-            descriptionText.text = quest.description;
+            if (questManager == null)
+            {
+                questManager = QuestManager.Instance;
+            }
+            OnCloseQuestUI = null;
+        }
 
-            goalText.text = quest.questGoal.currentAmount.ToString() + " / " + quest.questGoal.goalAmount.ToString();
+        void SetQuestUI(QuestObject _questobject)
+        {
+            Quest quest = DataManager.GetQuestData().Quests.quests[_questobject.number];
+            nameText.text = quest.name;
+
+            if (_questobject.questState == QuestState.Complete)
+            {
+                descriptionText.text = "Quest Completed";
+            }
+            else
+            {
+                descriptionText.text = quest.description;
+            }
+
+            goalText.text = _questobject.questGoal.currentAmount.ToString() + " / " + _questobject.questGoal.goalAmount.ToString();
             rewardgoldText.text = quest.rewardGold.ToString();
             rewardExpText.text = quest.rewardExp.ToString();
             
@@ -54,7 +69,7 @@ namespace MySampleEx
             }
 
             //버튼 세팅
-            switch (quest.questState)
+            switch (_questobject.questState)
             {
                 case QuestState.Ready:
                     acceptButton.SetActive(true);
@@ -75,18 +90,59 @@ namespace MySampleEx
             okButton.SetActive(false);
         }
 
-        public void OpenQuestUI()
+        //플레이어 퀘스트 보기
+        public void OpenPlayerQuestUI(Action closeMethod)
         {
-           if(QuestManager.Instance.currentQuest == null)
+            if (closeMethod != null)
+                OnCloseQuestUI += closeMethod;
+            if (questManager.playerQuests.Count <= 0)
             {
-                //
+                CloseQuestUI();
                 return;
             }
-            SetQuestUI(QuestManager.Instance.currentQuest);         //정보창 세팅
+            questManager.SetCurrentQuest(questManager.playerQuests[0]);
+            SetQuestUI(questManager.currentQuest);
         }
+
+        //NPC 퀘스트 보기
+        public void OpenQuestUI(Action closeMethod)
+        {
+            if(closeMethod != null)
+            {
+                OnCloseQuestUI += closeMethod;
+            }
+
+           if (questManager.currentQuest == null)
+            {
+                CloseQuestUI();
+                return;
+            }
+
+            SetQuestUI(questManager.currentQuest);       //정보창 세팅
+        }
+
         public void CloseQuestUI()
         {
-            UIManager.Instance.CloseQuestUI();
+            ResetButtons();
+            OnCloseQuestUI?.Invoke();
         }
+
+        public void AcceptQuest()
+        {
+            //플레이어에게 퀘스트리스트에 currentQuest 추가
+            questManager.AddPlayerQuest();
+
+            CloseQuestUI();
+        }
+
+        public void GiveupQuest()
+        {
+            //플레이어에게 퀘스트리스트에 currentQuest 제거
+            questManager.GiveupPlayerQuest();
+
+            CloseQuestUI();
+        }
+
+        
     }
 }

@@ -10,6 +10,10 @@ namespace MySampleEx
     public class PlayerController : MonoBehaviour, IMessageReceiver
     {
         #region Variables
+
+        public InventoryObject inventory;
+        public InventoryObject equipment;
+
         public float maxForwardSpeed = 8f;              //플레이어 최고 이동 속도
         public float minTurnSpeed = 400f;                //플레이어 최저 회전 속도
         public float maxTurnSpeed = 1200f;              //플레이어 최고 회전 속도
@@ -111,14 +115,14 @@ namespace MySampleEx
         private void OnEnable()
         {
             m_Damageable = GetComponent<Damageable>();
-            m_Damageable.onDamageMessageReceiver.Add(this);
+            m_Damageable.onDamageMessageReceviers.Add(this);
             m_Damageable.IsInvulnerable = true;
             EquipMeeleWeapon(false);
         }
 
         private void OnDisable()
         {
-            m_Damageable.onDamageMessageReceiver.Remove(this);
+            m_Damageable.onDamageMessageReceviers.Remove(this);
         }
 
         private void FixedUpdate()
@@ -424,6 +428,11 @@ namespace MySampleEx
         void Die(Damageable.DamageMessage damageMessage)
         {
             //TODO
+        }
+        public bool PickupItem(ItemObject itemObject)
+        {
+            Item newItem = itemObject.CreateItem();
+            return inventory.AddItem(newItem, 1);
         }
     }
 }

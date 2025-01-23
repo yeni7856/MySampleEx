@@ -63,8 +63,11 @@ namespace MySampleEx
                 //아이템을 가진 슬롯에 누적 amount
                 slot.AddItemAmount(amount);
             }
+            //아이템 획득 퀘스트 처리
+            QuestManager.Instance.UpdateQuest(QuestType.Collect, amount);
             return true;
         }
+
 
         //매개변수로 들어온 아이템을 가진 슬롯 찾기
         public ItemSlot FindItemInINventory(Item item)

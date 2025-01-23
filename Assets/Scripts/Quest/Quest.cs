@@ -41,7 +41,7 @@ namespace MySampleEx
     [Serializable]
     public class Quest
     {
-        public int number { get; set; }         //퀘스트 인덱스
+        public int number { get; set; }         //퀘스트네임
         public int npcNumber { get; set; }      //퀘스트를 가지고 있는 NPC
         public string name { get; set; }        //퀘스트 이름
         public string description { get; set; } //퀘스트 내용
@@ -54,31 +54,6 @@ namespace MySampleEx
         public int rewardExp { get; set; }          //보상 경험치
         public int rewardItem { get; set; }         //보상 아이템
 
-        [NonSerialized]
-        public QuestGoal questGoal;              //퀘스트 목표
-        [NonSerialized]
-        public QuestState questState;           //퀘스트 상태
-
-        //퀘스트 미션 달성 - Kill
-        public void EnemyKill(int enemyId)
-        {
-            if(questGoal.questType == QuestType.Kill)
-            {
-                if(questGoal.goalIndex == enemyId)
-                {
-                    questGoal.currentAmount++;
-                }
-            }
-        }
-        public void ItemCollect(int itemId)
-        {
-            if (questGoal.questType == QuestType.Collect)
-            {
-                if (questGoal.goalIndex == itemId)
-                {
-                    questGoal.currentAmount++;
-                }
-            }
-        }
+        public QuestGoal questGoal { get; set; }   //퀘스트 목표 (새로 추가)
     }    
 }

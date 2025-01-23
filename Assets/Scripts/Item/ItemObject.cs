@@ -20,7 +20,7 @@ namespace MySampleEx
         public string description;
         #endregion
 
-        public Item CreateItme()
+        public Item CreateItem()
         {
             Item newItem = new Item(this);      //this 오브젝트 정보 넘겨줘야함
             return newItem;                 //아이템 반환

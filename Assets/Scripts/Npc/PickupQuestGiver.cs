@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 
 namespace MySampleEx
@@ -10,8 +9,25 @@ namespace MySampleEx
     public class PickupQuestGiver : PickupNpc
     {
         #region Variables
-        public List<Quest> quests;
+        public List<QuestObject> quests;
+
+        private QuestManager questManager;
         #endregion
+
+        private void OnEnable()
+        {
+            questManager = QuestManager.Instance;
+            questManager.OnAcceptQuest += OnAcceptQuest;
+            questManager.OnGiveUpQuest += OnGiveupQuest;
+            questManager.OnCompletQuest += OnCompletedQuest;
+        }
+
+        private void OnDisable()
+        {
+            questManager.OnAcceptQuest -= OnAcceptQuest;
+            questManager.OnGiveUpQuest -= OnGiveupQuest;
+            questManager.OnCompletQuest -= OnCompletedQuest;
+        }
 
         protected override void Start()
         {
@@ -20,34 +36,15 @@ namespace MySampleEx
         }
 
         //npc 의 인덱스에 지정된 퀘스트 목록 가져오기
-        public List<Quest> GetNpcQuest(int npcNumber)
+        public List<QuestObject> GetNpcQuest(int npcNumber)
         {
-            List<Quest> questList = new List<Quest>();
+            List<QuestObject> questList = new List<QuestObject>();
 
             foreach(Quest quest in DataManager.GetQuestData().Quests.quests)
             {
                 if(quest.npcNumber == npcNumber)
                 {
-                    Quest newQuest = new Quest();
-                    newQuest.number = quest.number;
-                    newQuest.npcNumber = quest.npcNumber;
-                    newQuest.name = quest.name;
-                    newQuest.description = quest.description;
-                    newQuest.dialogIndex = quest.dialogIndex;
-                    newQuest.level = quest.level;
-
-                    newQuest.questGoal = new QuestGoal();
-                    newQuest.questGoal.questType = quest.questType;
-                    newQuest.questGoal.goalIndex = quest.goalIndex;
-                    newQuest.questGoal.goalAmount = quest.goalAmount;
-                    newQuest.questGoal.currentAmount = 0;
-
-                    newQuest.rewardGold = quest.rewardGold;
-                    newQuest.rewardExp = quest.rewardExp;
-                    newQuest.rewardItem = quest.rewardItem;
-                    
-                    newQuest.questState = QuestState.Ready;
-
+                    QuestObject newQuest = new QuestObject(quest);
                     questList.Add(newQuest);
                 }
             }
@@ -58,22 +55,63 @@ namespace MySampleEx
         {
             if(quests.Count == 0)
             {
-               Debug.Log("모든 퀘스트를 클리어");
+                //0~2 중의 하나를 랜덤하게 대화한다
+                int randNum = Random.Range(0, 3);
+                UIManager.Instance.OpenDialogUI(randNum);
                 return;
             }
-            QuestManager.Instance.currentQuest = quests[0];         //담았다가
-
+            questManager.SetCurrentQuest(quests[0]);
+            int dialogIndex = DataManager.GetQuestData().Quests.quests[quests[0].number].dialogIndex;
             switch (quests[0].questState)
             {
                 case QuestState.Ready:
-                    UIManager.Instance.OpenDialogUI(quests[0].dialogIndex, npc.npcType);
+                    UIManager.Instance.OpenDialogUI(dialogIndex, npc.npcType);
                     break;
                 case QuestState.Accept:
-                    UIManager.Instance.OpenDialogUI(quests[0].dialogIndex + 1, npc.npcType);
+                    UIManager.Instance.OpenDialogUI(dialogIndex + 1);
                     break;
                 case QuestState.Complete:
-                    UIManager.Instance.OpenDialogUI(quests[0].dialogIndex + 2, npc.npcType);
+                    UIManager.Instance.OpenDialogUI(dialogIndex + 2, npc.npcType);
+                    CompletedQuest();
                     break;
+            }
+        }
+        //퀘스트 완료 처리
+        public void CompletedQuest()
+        {
+            //퀘스트 보상 받기
+            questManager.RewardQuest();
+            //NPC퀘스트 리스트에서 제거
+            quests.Remove(quests[0]);
+        }
+        public void OnAcceptQuest(QuestObject questObject)
+        {
+            foreach (var quest in quests)
+            {
+                if (quest.number == questObject.number)
+                {
+                    quest.questState = QuestState.Accept;
+                }
+            }
+        }
+        public void OnGiveupQuest(QuestObject questObject)
+        {
+            foreach (var quest in quests)
+            {
+                if (quest.number == questObject.number)
+                {
+                    quest.questState = QuestState.Ready;
+                }
+            }
+        }
+        public void OnCompletedQuest(QuestObject questObject)
+        {
+            foreach (var quest in quests)
+            {
+                if (quest.number == questObject.number)
+                {
+                    quest.questState = QuestState.Complete;
+                }
             }
         }
     }
