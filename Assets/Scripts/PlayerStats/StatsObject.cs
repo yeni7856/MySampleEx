@@ -11,10 +11,16 @@ namespace MySampleEx
     {
         #region Variables
         public Attribute[] attributes;
-        public int level;
-        public int exp;
+
+        [SerializeField] private int level;
+        [SerializeField] private int exp;
+        [SerializeField] private int gold;
 
         public Action<StatsObject> OnChagnedStats;
+
+        public int Level => level;
+        public int Exp => exp;
+        public int Gold => gold;
 
         public int Health {  get;  set; }
         public int Mana { get;  set; }
@@ -76,6 +82,7 @@ namespace MySampleEx
 
             level = 1;
             exp = 0;
+            gold = 100;
 
             SetBaseValue(CharacterAttribute.Agility, 100);
             SetBaseValue(CharacterAttribute.Intellect, 100);
@@ -132,6 +139,54 @@ namespace MySampleEx
         {
             //스탯 변경시 등록된 함수 호출
             OnChagnedStats?.Invoke(this);
+
+            return;
+        }
+
+        public void AddGold(int amount)
+        {
+            gold += amount;
+            Debug.Log("AddGold : " + amount.ToString());
+            //스탯 변경시 등록된 함수 호출
+            OnChagnedStats?.Invoke(this);
+        }
+
+        public bool useGold(int amount)
+        {
+            if(gold < amount)
+            {
+                Debug.Log("소지금 부족");
+                return false;
+            }
+            gold -= amount;
+            //스탯 변경시 등록된 함수 호출
+            OnChagnedStats?.Invoke(this);
+            return true;
+        }
+
+        public bool Addexp(int amount)
+        {
+            bool isLevelup = false;
+
+            exp += amount;
+
+            //레벨업 체크
+            while(exp >= GetExpForLevelup(level))
+            {
+                exp -= GetExpForLevelup(level);
+                level++;
+                //레벨업 보상
+                //...
+                isLevelup = true;
+            }
+            OnChagnedStats?.Invoke(this);
+            return isLevelup;
+        }
+
+        //지정한 레벨에서 다음 레벨로 가는데 필요한 경험치값 반환
+        public int GetExpForLevelup(int nowLevel)
+        {
+            return level * 100;
         }
     }
 

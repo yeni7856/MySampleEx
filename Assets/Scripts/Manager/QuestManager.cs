@@ -15,8 +15,9 @@ namespace MySampleEx
 
         public Action<QuestObject> OnAcceptQuest;
         public Action<QuestObject> OnGiveUpQuest;
-        public Action<QuestObject> OnCompletQuest;   
+        public Action<QuestObject> OnCompletQuest;
 
+        public StatsObject playerStats;
         #endregion
 
         private void Start()
@@ -84,6 +85,15 @@ namespace MySampleEx
         {
             //
             Debug.Log("퀘스트 보상 받았습니다");
+            Quest quest = DataManager.GetQuestData().Quests.quests[currentQuest.number];
+            playerStats.AddGold(quest.rewardGold);
+
+            if (playerStats.Addexp(quest.rewardExp))
+            {
+                //vfx, sfx
+                Debug.Log("퀘스트 보상 받았습니다");
+            }
+
             //플레이어 퀘스트 리스트에서도 삭제
             RemovePlayerQuest(currentQuest);
         }

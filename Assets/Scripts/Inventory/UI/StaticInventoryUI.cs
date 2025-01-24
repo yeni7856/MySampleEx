@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace MySampleEx
 {
@@ -8,6 +10,9 @@ namespace MySampleEx
     {
         #region Variables
         public GameObject[] staticSlots;
+        public GameObject unEquipButton;
+
+        public Action OnCloseEquipUI;
         #endregion
 
         public override void CreateSlots()
@@ -23,11 +28,46 @@ namespace MySampleEx
                 AddEvent(slotgo, EventTriggerType.BeginDrag, delegate { OnStartDrag(slotgo); });
                 AddEvent(slotgo, EventTriggerType.Drag, delegate { OnDrag(slotgo); });
                 AddEvent(slotgo, EventTriggerType.EndDrag, delegate { OnEndDrag(slotgo); });
+                AddEvent(slotgo, EventTriggerType.PointerClick, delegate { OnClick(slotgo); });
 
                 inventoryObject.Slots[i].slotUI = slotgo;
                 slotUIs.Add(slotgo, inventoryObject.Slots[i] );
             }
         }
-    }
 
+        //장착 해제
+        public void UnEquip()
+        {
+            if (selectSlotObject == null)
+                return;
+            if (UIManager.Instance.AddItemInventory(slotUIs[selectSlotObject].item, 1))
+            {
+                slotUIs[selectSlotObject].Remove();
+                UpdateSelectSlot(null);
+            }
+        }
+
+        public override void UpdateSelectSlot(GameObject go)
+        {
+            base.UpdateSelectSlot(go);
+            if (selectSlotObject == null)
+            {
+                unEquipButton.GetComponent<Button>().interactable = false;
+            }
+            else
+            {
+                unEquipButton.GetComponent<Button>().interactable = true;
+            }
+        }
+
+        void ResetButtons()
+        {
+            unEquipButton.SetActive(false);
+        }
+        public void CloseEquipMentUI()
+        {
+            ResetButtons();
+            OnCloseEquipUI?.Invoke();
+        }
+    }
 }

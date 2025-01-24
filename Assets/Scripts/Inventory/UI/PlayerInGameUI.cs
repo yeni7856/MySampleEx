@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.Rendering;
 
 namespace MySampleEx
 {
@@ -14,6 +15,7 @@ namespace MySampleEx
 
         public TextMeshProUGUI levelText;
         public TextMeshProUGUI expText;
+        public TextMeshProUGUI goldText;
         #endregion
 
         private void OnEnable()
@@ -28,23 +30,19 @@ namespace MySampleEx
 
         private void Start()
         {
-            healthBar.fillAmount = statsObject.HealthPercentage;
-            manaBar.fillAmount = statsObject.ManaPercentage;
-
-            levelText.text = statsObject.level.ToString();
-            expText.text = statsObject.exp.ToString();
+            OnChangedStats(statsObject);
         }
 
-        private void Update()
-        {
-            levelText.text = statsObject.level.ToString();
-            expText.text = statsObject.exp.ToString();
-        }
 
         private void OnChangedStats(StatsObject statsObject)
         {
             healthBar.fillAmount = statsObject.HealthPercentage;
             manaBar.fillAmount = statsObject.ManaPercentage;
+
+            levelText.text = statsObject.Level.ToString();
+            expText.text = statsObject.Exp.ToString() + "/" + statsObject.GetExpForLevelup(statsObject.Level).ToString();
+            goldText.text = statsObject.Gold.ToString();
+
         }
     }
 }

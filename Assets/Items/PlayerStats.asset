@@ -32,4 +32,5 @@ MonoBehaviour:
     value:
       modifedValue: 100
   level: 1
-  exp: 0
+  exp: 1
+  gold: 100

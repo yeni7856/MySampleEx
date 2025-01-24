@@ -15,6 +15,7 @@ namespace MySampleEx
         public bool stackable;                  //슬롯에 누적 여부 //true면 누적
         public Sprite icon;
         public GameObject modelPrefab;
+        public int shopPrice;                   //상점 판매 금액
 
         [TextArea(15,20)]
         public string description;

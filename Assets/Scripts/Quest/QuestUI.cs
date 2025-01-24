@@ -131,7 +131,6 @@ namespace MySampleEx
         {
             //플레이어에게 퀘스트리스트에 currentQuest 추가
             questManager.AddPlayerQuest();
-
             CloseQuestUI();
         }
 

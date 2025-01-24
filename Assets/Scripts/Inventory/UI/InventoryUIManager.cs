@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,6 +17,12 @@ namespace MySampleEx
         #region Variables
         public InventoryObject inventoryObject;
         public Dictionary<GameObject, ItemSlot> slotUIs = new Dictionary<GameObject, ItemSlot>();
+        
+        //슬롯 선택기능
+        protected GameObject selectSlotObject = null;   //현재 선택된 슬롯 오브젝트
+        public Action<GameObject> OnUpdateSelectSlot;
+
+        public Action OnCloseInventoryUI;
         #endregion
 
         private void Awake()
@@ -104,7 +111,10 @@ namespace MySampleEx
         public void OnStartDrag(GameObject go)
         {
             MouseData.tempItemBeginDragged = CreateDragImage(go);
+            OnUpdateSelectSlot?.Invoke(null);
+            UpdateSelectSlot(null);
         }
+
         //마우스 드래그시 마우스 포인터이미지 오브젝트
        GameObject CreateDragImage(GameObject go)
         {
@@ -126,6 +136,7 @@ namespace MySampleEx
 
             return dragImage;
         }
+
         //마우스 드래그시 마우스 포인터에 달고 다니는 이미지 위치 설정
         public void OnDrag(GameObject go)
         {
@@ -136,6 +147,7 @@ namespace MySampleEx
             MouseData.tempItemBeginDragged.GetComponent<RectTransform>().position = Input.mousePosition;
 
         }
+
         //슬롯 오브젝트에 마우스를 드래그 끝날때 호출
         public void OnEndDrag(GameObject go)
         {
@@ -160,6 +172,50 @@ namespace MySampleEx
             {
                 Debug.Log("슬롯없음");
             }
+        }
+        
+        //슬롯 오브젝트를 마우스로 클릭할때 호출
+        public void OnClick(GameObject go)
+        {
+            OnUpdateSelectSlot?.Invoke(null);   //업데이트를 null해야 디스토리 됨
+
+            ItemSlot slot = slotUIs[go];
+
+            //아이템 존재 여부 체크
+            if(slot.item.id >= 0)
+            {
+                //현재 선택된 슬롯 오브젝트 와 같으면 다시선택
+                if (selectSlotObject == go)
+                {
+                    UpdateSelectSlot(null);
+                }
+                else
+                {
+                    UpdateSelectSlot(go);
+                }
+            }
+        }
+
+        public virtual void UpdateSelectSlot(GameObject go)
+        {
+            selectSlotObject = go;
+            foreach(KeyValuePair<GameObject, ItemSlot> slot in slotUIs)      //2개의 값이 들어옴
+            {
+                //slot.Key
+                //slot.Value
+                if(slot.Key == go)
+                {
+                    slot.Value.slotUI.transform.GetChild(1).GetComponent<Image>().enabled = true;
+                }
+                else
+                {
+                    slot.Value.slotUI.transform.GetChild(1).GetComponent<Image>().enabled = false;
+                }
+            }
+        }
+        public virtual void CloseInventoryUI()
+        {
+            OnCloseInventoryUI?.Invoke();
         }
     }
 }

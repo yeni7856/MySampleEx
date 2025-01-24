@@ -14,8 +14,18 @@ namespace MySampleEx
         public DialogUI dialogUI;
         public QuestUI questUI;
 
+        public InventoryObject inventory;
+        public StatsObject playerStats;
+
         public int itemId = 0;
         #endregion
+
+        private void OnEnable()
+        {
+            palyerInventoryUI.OnUpdateSelectSlot += palyerEquipmentUI.UpdateSelectSlot;
+
+            palyerEquipmentUI.OnUpdateSelectSlot += palyerInventoryUI.UpdateSelectSlot;
+        }
 
         private void Update()
         {
@@ -92,6 +102,14 @@ namespace MySampleEx
         public void CloseQuestUI()           //퀘스트창 닫기
         {
             Toggle(questUI.gameObject);
+        }
+        public bool AddItemInventory(Item item, int amount)
+        {
+            return inventory.AddItem(item, amount); 
+        }
+        public void AddGold(int amout)
+        {
+            playerStats.AddGold(amout);
         }
     }
 }
