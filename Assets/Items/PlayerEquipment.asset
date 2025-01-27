@@ -42,4 +42,4 @@ MonoBehaviour:
         buffs: []
       amount: 0
       AllowedItme: 08000000
-  savePath: /Inventory.json
+  savePath: /Equipment.json

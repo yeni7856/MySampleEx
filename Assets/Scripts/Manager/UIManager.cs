@@ -13,6 +13,7 @@ namespace MySampleEx
         public PlayerStatsUI playerStatsUI;
         public DialogUI dialogUI;
         public QuestUI questUI;
+        public ShopUI shopUI;
 
         public InventoryObject inventory;
         public StatsObject playerStats;
@@ -31,11 +32,11 @@ namespace MySampleEx
         {
             if (Input.GetKeyDown(KeyCode.I))
             {
-                Toggle(palyerInventoryUI.gameObject);
+                OpenInventoryUI();
             }
             if (Input.GetKeyDown(KeyCode.U))
             {
-                Toggle(palyerEquipmentUI.gameObject);
+                OpenEquipMentUI();
             }
             if (Input.GetKeyDown(KeyCode.O))
             {
@@ -45,16 +46,45 @@ namespace MySampleEx
             {
                 OpenPlayerQuestUI();
             }
-
-            if (Input.GetKeyDown(KeyCode.N))
+            if(Input.GetKeyDown(KeyCode.Y))
             {
-                AddNewItem();
+                OpenShopUI();
             }
+
         }
 
         public void Toggle(GameObject go)
         {
             go.SetActive(!go.activeSelf);
+        }
+        public void OpenInventoryUI()
+        {
+            palyerInventoryUI.UpdateSelectSlot(null);    
+            Toggle(palyerInventoryUI.gameObject);
+            if (palyerInventoryUI.gameObject.activeSelf)
+            {
+                palyerInventoryUI.OpenInventoryUI(CloseInventoryUI);
+            }
+        }
+
+        public void CloseInventoryUI()
+        {
+            Toggle(palyerInventoryUI.gameObject);
+        }
+
+        public void OpenEquipMentUI()
+        {
+            palyerEquipmentUI.UpdateSelectSlot(null);
+            Toggle(palyerEquipmentUI.gameObject);
+            if (palyerEquipmentUI.gameObject.activeSelf)
+            {
+                palyerEquipmentUI.OpenInventoryUI(CloseEquipMentUI);
+            }
+        }
+
+        public void CloseEquipMentUI()
+        {
+            Toggle(palyerEquipmentUI.gameObject);
         }
 
         public void AddNewItem()
@@ -73,6 +103,11 @@ namespace MySampleEx
             {
                 //quest UI 열기
                 dialogUI.OnCloseDialog += OpenQuestUI;
+            }
+            else if(npcType == NpcType.Merchant)
+            {
+                //shop UI 열기
+                dialogUI.OnCloseDialog += OpenShopUI;
             }
             dialogUI.StartDialog(dialogIndex);
         }
@@ -110,6 +145,29 @@ namespace MySampleEx
         public void AddGold(int amout)
         {
             playerStats.AddGold(amout);
+        }
+
+        public void OpenShopUI()
+        {
+            shopUI.UpdateSelectSlot(null);
+            Toggle(shopUI.gameObject);
+            if(shopUI.gameObject.activeSelf)
+            {
+                shopUI.OpenInventoryUI(CloseShopUI);
+            }
+        }
+        public void CloseShopUI()
+        {
+            Toggle(shopUI.gameObject);
+        }
+        public bool UseGold(int amount)
+        {
+            return playerStats.useGold(amount);
+        }
+
+        public bool EnoughGold(int amount)
+        {
+            return playerStats.EnoughGold(amount);
         }
     }
 }

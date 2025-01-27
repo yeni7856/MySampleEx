@@ -64,6 +64,7 @@ namespace MySampleEx
         {
             unEquipButton.SetActive(false);
         }
+
         public void CloseEquipMentUI()
         {
             ResetButtons();

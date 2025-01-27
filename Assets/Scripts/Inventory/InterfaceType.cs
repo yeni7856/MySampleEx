@@ -9,6 +9,7 @@ namespace MySampleEx
     {
         Inventory,
         Equipment,
+        Shop,
         QuickSlots,
 
     }

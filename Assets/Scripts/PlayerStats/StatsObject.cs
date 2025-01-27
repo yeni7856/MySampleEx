@@ -82,7 +82,7 @@ namespace MySampleEx
 
             level = 1;
             exp = 0;
-            gold = 100;
+            gold = 1000;
 
             SetBaseValue(CharacterAttribute.Agility, 100);
             SetBaseValue(CharacterAttribute.Intellect, 100);
@@ -162,6 +162,11 @@ namespace MySampleEx
             //스탯 변경시 등록된 함수 호출
             OnChagnedStats?.Invoke(this);
             return true;
+        }
+
+        public bool EnoughGold(int amount)
+        {
+            return gold >= amount;
         }
 
         public bool Addexp(int amount)

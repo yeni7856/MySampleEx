@@ -42,6 +42,11 @@ namespace MySampleEx
             AddEvent(this.gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(this.gameObject); } );
         }
 
+        protected virtual void OnEnable()
+        {
+            OnCloseInventoryUI = null;
+        }
+
         private void Start()
         {
             //UI 슬롯 갱신
@@ -213,9 +218,19 @@ namespace MySampleEx
                 }
             }
         }
+
+        public virtual void OpenInventoryUI(Action closeMethod)
+        {
+            if (closeMethod != null)
+                OnCloseInventoryUI += closeMethod;
+            //shop 셋팅
+        }
+
         public virtual void CloseInventoryUI()
         {
+            UpdateSelectSlot(null);
             OnCloseInventoryUI?.Invoke();
         }
+
     }
 }
