@@ -11,6 +11,7 @@ namespace MySampleEx
     /// </summary>
     public class AdManager : PersistentSingleton<AdManager>     //모든씬 끌고가는 싱글톤
     {
+#if AD_MODE
         #region Variables
         BannerView bannerView;
         InterstitialAd interstitialAd;
@@ -220,5 +221,6 @@ namespace MySampleEx
             RequestRewardAd();
         }
         #endregion
+#endif
     }
 }

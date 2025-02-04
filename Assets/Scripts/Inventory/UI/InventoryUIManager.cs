@@ -47,7 +47,7 @@ namespace MySampleEx
             OnCloseInventoryUI = null;
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             //UI 슬롯 갱신
             for(int i = 0;i < inventoryObject.Slots.Length; i++)

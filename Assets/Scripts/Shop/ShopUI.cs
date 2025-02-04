@@ -15,6 +15,8 @@ namespace MySampleEx
 
         private UIManager uiManager;
 
+        public GameObject adButton;
+
         public override void CreateSlots()
         {
             slotUIs = new Dictionary<GameObject, ItemSlot>();
@@ -23,7 +25,7 @@ namespace MySampleEx
                 GameObject slotgo = staticSlots[i];
 
                 //생성된 슬롯 오브젝트의 이벤트 트리거에 이벤트 등록
-               AddEvent(slotgo, EventTriggerType.PointerClick, delegate { OnClick(slotgo); });
+                AddEvent(slotgo, EventTriggerType.PointerClick, delegate { OnClick(slotgo); });
 
                 inventoryObject.Slots[i].slotUI = slotgo;
                 slotUIs.Add(slotgo, inventoryObject.Slots[i]);
@@ -41,6 +43,9 @@ namespace MySampleEx
             {
                 uiManager = UIManager.Instance;
             }
+#if AD_MODE
+            adButton.SetActive(true);   
+#endif
         }
 
         public override void OpenInventoryUI(Action closeMethod)
@@ -90,7 +95,9 @@ namespace MySampleEx
         {
             //타이머 - 일정시간동안 광고를 보지 못하도록 한다
 
+#if AD_MODE
             AdManager.Instance.ShowRewardAd();
+#endif
         }
     }
 }
