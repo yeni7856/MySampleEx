@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "6833855296",
+    "project_id": "unitymysampleex01",
+    "storage_bucket": "unitymysampleex01.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6833855296:android:f7562367f7616ab60fb8a5",
+        "android_client_info": {
+          "package_name": "com.yeeun.MySampleEx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBh8zHEV5O7cBXQZVY-aJb-QEwraOQmkLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

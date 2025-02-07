@@ -30,6 +30,7 @@ namespace MySampleEx
 
         private void Update()
         {
+#if !TOUCH_MODE
             if (Input.GetKeyDown(KeyCode.I))
             {
                 OpenInventoryUI();
@@ -50,7 +51,7 @@ namespace MySampleEx
             {
                 OpenShopUI();
             }
-
+#endif
         }
 
         public void Toggle(GameObject go)

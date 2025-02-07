@@ -3,6 +3,15 @@ using UnityEngine;
 
 namespace MySampleEx
 {
+    [Serializable]
+    public class UserData
+    {
+        public int level;
+        public int exp;
+        public int gold;
+        public int mana;
+        public int health;
+    }
     /// <summary>
     /// 캐릭터 스탯 데이터 스크립터블 오브젝트
     /// </summary>
@@ -12,41 +21,68 @@ namespace MySampleEx
         #region Variables
         public Attribute[] attributes;
 
-        [SerializeField] private int level;
-        [SerializeField] private int exp;
-        [SerializeField] private int gold;
+        [SerializeField] private UserData userData;
 
         public Action<StatsObject> OnChagnedStats;
 
-        public int Level => level;
-        public int Exp => exp;
-        public int Gold => gold;
+        public int Level
+        {
+            get => userData.level;
+            set => userData.level = value;
+        }
 
-        public int Health {  get;  set; }
-        public int Mana { get;  set; }
+        public int Exp
+        {
+            get => userData.exp;
+            set => userData.exp = value;
+        }
+
+        public int Gold
+        {
+            get => userData.gold;
+            set => userData.gold = value;
+        }
+
+        public int Health
+        {
+            get => userData.health;
+            set => userData.health = value;
+        }
+        public int Mana
+        {
+            get => userData.mana;
+            set => userData.mana = value;
+        }
+
+        public int MaxHealth
+        {
+            get
+            {
+                int maxHealth = 0;
+                foreach (var attribute in attributes)
+                {
+                    if (attribute.type == CharacterAttribute.Health)
+                    {
+                        maxHealth = attribute.value.ModifedValue;
+                    }
+                }
+                return maxHealth;
+            }
+        }
 
         public float HealthPercentage
         {
             get 
             {
-                int health = Health;
-                int maxHealth = health;
-                foreach(var attribute in attributes)
-                {
-                    if(attribute.type == CharacterAttribute.Health)
-                    {
-                        maxHealth = attribute.value.ModifedValue;
-                    }
-                }
-                return (maxHealth > 0) ? ((float)health / (float)maxHealth) : 0f;
+                return (MaxHealth > 0) ? ((float)Health / (float)MaxHealth) : 0f;
             }
         }
-        public float ManaPercentage
+
+        public int MaxMana
         {
             get
             {
-                int mana = Mana;
-                int maxMana = mana;
+                int maxMana = 0;
                 foreach (var attribute in attributes)
                 {
                     if (attribute.type == CharacterAttribute.Mana)
@@ -54,7 +90,15 @@ namespace MySampleEx
                         maxMana = attribute.value.ModifedValue;
                     }
                 }
-                return (maxMana > 0) ? ((float)mana / (float)maxMana) : 0f;
+                return maxMana;
+            }
+        }
+
+        public float ManaPercentage
+        {
+            get
+            {
+                return (MaxMana > 0) ? ((float)Mana / (float)MaxMana) : 0f;
             }
         }
         //최초 1회 초기화 체크
@@ -80,9 +124,6 @@ namespace MySampleEx
                 attribute.value = new ModifiableInt(OnModifiedValue);
             }
 
-            level = 1;
-            exp = 0;
-            gold = 1000;
 
             SetBaseValue(CharacterAttribute.Agility, 100);
             SetBaseValue(CharacterAttribute.Intellect, 100);
@@ -90,6 +131,9 @@ namespace MySampleEx
             SetBaseValue(CharacterAttribute.Strength, 100);
             SetBaseValue(CharacterAttribute.Health, 100);
             SetBaseValue(CharacterAttribute.Mana, 100);
+            Level = 1;
+            Exp = 0;
+            Gold = 1000;
 
             //Current Health, Mana 초기화
             Health = GetModifiredValue(CharacterAttribute.Health);
@@ -145,7 +189,7 @@ namespace MySampleEx
 
         public void AddGold(int amount)
         {
-            gold += amount;
+            Gold += amount;
             Debug.Log("AddGold : " + amount.ToString());
             //스탯 변경시 등록된 함수 호출
             OnChagnedStats?.Invoke(this);
@@ -153,12 +197,12 @@ namespace MySampleEx
 
         public bool useGold(int amount)
         {
-            if(gold < amount)
+            if(Gold < amount)
             {
                 Debug.Log("소지금 부족");
                 return false;
             }
-            gold -= amount;
+            Gold -= amount;
             //스탯 변경시 등록된 함수 호출
             OnChagnedStats?.Invoke(this);
             return true;
@@ -166,20 +210,28 @@ namespace MySampleEx
 
         public bool EnoughGold(int amount)
         {
-            return gold >= amount;
+            return Gold >= amount;
         }
 
         public bool Addexp(int amount)
         {
             bool isLevelup = false;
 
-            exp += amount;
+            Exp += amount;
+
+            int nowLevel = Level;
 
             //레벨업 체크
-            while(exp >= GetExpForLevelup(level))
+            while(Exp >= GetExpForLevelup(nowLevel))
             {
-                exp -= GetExpForLevelup(level);
-                level++;
+                Exp -= GetExpForLevelup(nowLevel);
+#if NET_MODE
+                nowLevel++;
+                NetManager.Instance.NetsendUserLevelup();
+#else
+                Level++;
+                nowLevel++;
+#endif
                 //레벨업 보상
                 //...
                 isLevelup = true;
@@ -191,8 +243,19 @@ namespace MySampleEx
         //지정한 레벨에서 다음 레벨로 가는데 필요한 경험치값 반환
         public int GetExpForLevelup(int nowLevel)
         {
-            return level * 100;
+            return Level * 100;
         }
+
+        #region Save/Load Methods
+        public string ToJson()
+        {
+            return JsonUtility.ToJson(userData);
+        }
+        public void FromJson(string jsonString)
+        {
+            userData = JsonUtility.FromJson<UserData>(jsonString);
+        }
+        #endregion
     }
 
 }

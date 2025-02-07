@@ -18,19 +18,16 @@ MonoBehaviour:
       modifedValue: 100
   - type: 1
     value:
-      modifedValue: 120
+      modifedValue: 100
   - type: 3
     value:
-      modifedValue: 108
+      modifedValue: 100
   - type: 2
     value:
-      modifedValue: 115
+      modifedValue: 100
   - type: 4
     value:
       modifedValue: 100
   - type: 5
     value:
       modifedValue: 100
-  level: 1
-  exp: 1
-  gold: 100

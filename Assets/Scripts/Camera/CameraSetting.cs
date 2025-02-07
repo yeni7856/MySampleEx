@@ -20,6 +20,12 @@ namespace MySampleEx
         {
             freeLookCamera.Follow = follow;
             freeLookCamera.LookAt = lookAt; 
+
+          
+        }
+        public void SetchineInputAxisController(bool enable)       //uI 클릭시
+        {
+            freeLookCamera.GetComponent<CinemachineInputAxisController>().enabled = enable;
         }
     }
 }

@@ -55,6 +55,10 @@ ExportedObj/
 # Unity3D generated file on crash reports
 sysinfo.txt
 
+#MySampleEx Ignore Directory
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_5_0.bundle
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_5_0.so
+
 # Builds
 *.apk
 *.aab
@@ -71,3 +75,4 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+

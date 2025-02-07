@@ -120,6 +120,16 @@ namespace MySampleEx
         //인벤토리데이터 저장하기, 불러오기
         #region Save/Load Methods
         public string savePath = "/Inventory.json";
+
+        public string ToJson()
+        {
+            return JsonUtility.ToJson(container);
+        }
+        public void FromJson(string jsonString)
+        {
+            container = JsonUtility.FromJson<Inventory>(jsonString);
+        }
+
         [ContextMenu("Save")]
         public void Save()
         {
