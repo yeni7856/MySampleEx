@@ -41,7 +41,7 @@ namespace MySampleEx
             }
             if (Input.GetKeyDown(KeyCode.O))
             {
-                Toggle(playerStatsUI.gameObject);
+                OpenPlayerStatsUI();
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
@@ -71,6 +71,11 @@ namespace MySampleEx
         public void CloseInventoryUI()
         {
             Toggle(palyerInventoryUI.gameObject);
+        }
+
+        public void OpenPlayerStatsUI()
+        {
+            Toggle(playerStatsUI.gameObject);
         }
 
         public void OpenEquipMentUI()
