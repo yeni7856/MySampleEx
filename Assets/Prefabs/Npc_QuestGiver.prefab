@@ -306,6 +306,7 @@ MonoBehaviour:
     name: Merchant
   actionTextUI: {fileID: 6339152649680300435}
   actionText: 'Pickup '
+  interactDistance: 2
 --- !u!1 &7472375912974299131
 GameObject:
   m_ObjectHideFlags: 0

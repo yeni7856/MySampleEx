@@ -1089,3 +1089,4 @@ MonoBehaviour:
   manaBar: {fileID: 5430420116196524109}
   levelText: {fileID: 5019160480728752723}
   expText: {fileID: 6795385209582214072}
+  goldText: {fileID: 0}
