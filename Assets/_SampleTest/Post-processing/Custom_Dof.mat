@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_GrayScale
-  m_Shader: {fileID: -6465566751694194690, guid: 92cc482fe0fa1ac48a37029609954f0a,
+  m_Name: Custom_Dof
+  m_Shader: {fileID: -6465566751694194690, guid: 48a88b147a766a448abf356ae532813c,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -38,7 +38,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _GrayScale: 0.74
+    - _End: 15
+    - _Start: 5
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
